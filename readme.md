@@ -1,0 +1,1 @@
+First attempts at a working discord music bot.
