@@ -1,21 +1,6 @@
 package main
 
-import (
-	"JohnBot/internal"
-	"context"
-	"log/slog"
-	"os"
-	"os/signal"
-	"syscall"
-
-	"github.com/disgoorg/disgo"
-	"github.com/disgoorg/disgo/bot"
-	"github.com/disgoorg/disgo/gateway"
-	"github.com/disgoorg/disgo/handler"
-	"github.com/disgoorg/snowflake/v2"
-	"github.com/joho/godotenv"
-)
-
+/*
 type Config struct {
 	Token   string
 	GuildID snowflake.ID
@@ -77,3 +62,4 @@ func main() {
 	signal.Notify(s, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
 	<-s
 }
+*/

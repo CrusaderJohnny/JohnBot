@@ -19,4 +19,20 @@ var Commands = []discord.ApplicationCommandCreate{
 			},
 		},
 	},
+	discord.SlashCommandCreate{
+		Name:        "buttons",
+		Description: "Show clickable buttons",
+	},
+	discord.SlashCommandCreate{
+		Name:        "selectmenu",
+		Description: "Show select menu",
+	},
+	discord.SlashCommandCreate{
+		Name:        "selectrole",
+		Description: "Show role selection menu",
+	},
+	discord.SlashCommandCreate{
+		Name:        "selectchannel",
+		Description: "Show channel selection menu",
+	},
 }

@@ -6,16 +6,6 @@ import (
 )
 
 /*
-Handler function for /say command. Allows you to enter a message and has the bot say the message.
-Ephemeral tag controls message visibility from the bot
-True for only visible to person doing /say command
-False if visible to others
-*/
-func HandleSay(data discord.SlashCommandInteractionData, e *handler.CommandEvent) error {
-	return e.CreateMessage(discord.NewMessageCreate().WithContent(data.String("message")).WithEphemeral(data.Bool("ephemeral")))
-}
-
-/*
 Slash commands handler function
 Checks and compares the commandname to a match case then handles the logic for those commands
 */
