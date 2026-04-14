@@ -1,8 +1,8 @@
-package main
+package internal
 
 import "github.com/disgoorg/disgo/discord"
 
-var commands = []discord.ApplicationCommandCreate{
+var Commands = []discord.ApplicationCommandCreate{
 	discord.SlashCommandCreate{
 		Name:        "say",
 		Description: "says what you say",
