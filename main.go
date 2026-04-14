@@ -10,6 +10,7 @@ import (
 
 	"github.com/disgoorg/disgo"
 	"github.com/disgoorg/disgo/bot"
+	"github.com/disgoorg/disgo/gateway"
 	"github.com/disgoorg/disgo/handler"
 	"github.com/disgoorg/snowflake/v2"
 	"github.com/joho/godotenv"
@@ -34,12 +35,18 @@ func main() {
 	cfg := LoadConfig()
 
 	r := handler.New()
-	r.SlashCommand("/buttons", internal.HandleCommands)
+	r.SlashCommand("/say", internal.CommandsHandler)
+	r.SlashCommand("/buttons", internal.CommandsHandler)
 
 	// Client established, WithEventListeners for routing handler, WithEventListenerFunc for no router
 	client, err := disgo.New(cfg.Token,
-		bot.WithDefaultGateway(),
-		bot.WithEventListeners(r),
+		bot.WithGatewayConfigOpts(
+			gateway.WithIntents(
+				gateway.IntentGuildMessages,
+				gateway.IntentMessageContent,
+			),
+		), bot.WithEventListeners(r),
+		bot.WithEventListenerFunc(internal.ButtonClickRegister),
 	)
 
 	if err != nil {
