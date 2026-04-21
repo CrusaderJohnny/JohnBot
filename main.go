@@ -37,6 +37,7 @@ func main() {
 	r := handler.New()
 	r.SlashCommand("/say", internal.CommandsHandler)
 	r.SlashCommand("/buttons", internal.CommandsHandler)
+	r.SlashCommand("/selectmenu", internal.CommandsHandler)
 
 	// Client established, WithEventListeners for routing handler, WithEventListenerFunc for no router
 	client, err := disgo.New(cfg.Token,
@@ -46,7 +47,7 @@ func main() {
 				gateway.IntentMessageContent,
 			),
 		), bot.WithEventListeners(r),
-		bot.WithEventListenerFunc(internal.ButtonClickRegister),
+		bot.WithEventListenerFunc(internal.HandlerInteractions),
 	)
 
 	if err != nil {
