@@ -62,10 +62,11 @@ func main() {
 		slog.Error("error while registering guild commands", slog.Any("error", err))
 	}
 
-	// registers commands for the bot itself, takes up to an hour for these to register
+	/* registers commands for the bot itself, takes up to an hour for these to register
 	if _, err = client.Rest.SetGlobalCommands(client.ApplicationID, internal.Commands); err != nil {
 		slog.Error("error while registering user commands", slog.Any("error", err))
 	}
+	*/
 
 	if err = client.OpenGateway(context.TODO()); err != nil {
 		slog.Error("error while opening disgo gateway", slog.Any("error", err))
