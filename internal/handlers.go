@@ -43,6 +43,38 @@ func CommandsHandler(data discord.SlashCommandInteractionData, e *handler.Comman
 						discord.NewStringSelectMenuOption("Blue", "blue"),
 					))},
 		})
+	case "selectuser":
+		return e.CreateMessage(discord.MessageCreate{
+			Content: "Select a user",
+			Components: []discord.LayoutComponent{
+				discord.NewActionRow(
+					discord.NewUserSelectMenu("user_select", "Select a user")),
+			},
+		})
+	case "selectrole":
+		return e.CreateMessage(discord.MessageCreate{
+			Content: "Select a role",
+			Components: []discord.LayoutComponent{
+				discord.NewActionRow(
+					discord.NewRoleSelectMenu("role_select", "Select a role")),
+			},
+		})
+	case "selectchannel":
+		return e.CreateMessage(discord.MessageCreate{
+			Content: "Select a channel",
+			Components: []discord.LayoutComponent{
+				discord.NewActionRow(
+					discord.NewChannelSelectMenu("channel_select", "Select a channel")),
+			},
+		})
+	case "mentionablemenu":
+		return e.CreateMessage(discord.MessageCreate{
+			Content: "Choose a mentionable menu",
+			Components: []discord.LayoutComponent{
+				discord.NewActionRow(
+					discord.NewMentionableSelectMenu("mention_select", "Select a user or role")),
+			},
+		})
 	}
 	return nil
 }
@@ -148,5 +180,17 @@ func HandlerInteractions(event *events.ComponentInteractionCreate) {
 		ButtonClickRegister(event, response)
 	case discord.ComponentTypeStringSelectMenu:
 		SelectMenuClickRegister(event, response)
+	case discord.ComponentTypeUserSelectMenu:
+		return
+	case discord.ComponentTypeRoleSelectMenu:
+		return
+	case discord.ComponentTypeChannelSelectMenu:
+		return
+	case discord.ComponentTypeMentionableSelectMenu:
+		return
+	default:
+		_ = event.CreateMessage(discord.MessageCreate{
+			Content: "Unknown Interaction",
+		})
 	}
 }

@@ -38,6 +38,10 @@ func main() {
 	r.SlashCommand("/say", internal.CommandsHandler)
 	r.SlashCommand("/buttons", internal.CommandsHandler)
 	r.SlashCommand("/selectmenu", internal.CommandsHandler)
+	r.SlashCommand("/selectuser", internal.CommandsHandler)
+	r.SlashCommand("/selectrole", internal.CommandsHandler)
+	r.SlashCommand("/selectchannel", internal.CommandsHandler)
+	r.SlashCommand("/mentionablemenu", internal.CommandsHandler)
 
 	// Client established, WithEventListeners for routing handler, WithEventListenerFunc for no router
 	client, err := disgo.New(cfg.Token,

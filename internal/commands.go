@@ -35,4 +35,12 @@ var Commands = []discord.ApplicationCommandCreate{
 		Name:        "selectchannel",
 		Description: "Show channel selection menu",
 	},
+	discord.SlashCommandCreate{
+		Name:        "selectuser",
+		Description: "Show user selection menu",
+	},
+	discord.SlashCommandCreate{
+		Name:        "mentionablemenu",
+		Description: "Show mentionable menu for role selection",
+	},
 }
