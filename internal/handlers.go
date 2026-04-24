@@ -98,7 +98,7 @@ func HandlerInteractions(event *events.ComponentInteractionCreate) {
 	case discord.ComponentTypeUserSelectMenu:
 		selectUserClickRegister(event, response)
 	case discord.ComponentTypeRoleSelectMenu:
-		return
+		selectRoleClickRegister(event, response)
 	case discord.ComponentTypeChannelSelectMenu:
 		selectChannelClickRegister(event, response)
 	case discord.ComponentTypeMentionableSelectMenu:

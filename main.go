@@ -67,7 +67,7 @@ func main() {
 	}
 
 	/* registers commands for the bot itself, takes up to an hour for these to register
-	if _, err = client.Rest.SetGlobalCommands(client.ApplicationID, internal.Commands); err != nil {
+	if _, err = client.Rest.SetGlobalCommands(client.ApplicationID, []discord.ApplicationCommandCreate{}); err != nil {
 		slog.Error("error while registering user commands", slog.Any("error", err))
 	}
 	*/

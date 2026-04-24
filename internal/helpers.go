@@ -9,6 +9,8 @@ import (
 
 const defaultURL = "https://discord.com/"
 
+var defaultErrorMessage = "Error: Invalid selection"
+
 /*
 Button click interactions logic
 Handles the button click logic and reply for event data
@@ -41,6 +43,7 @@ func buttonClickRegister(event *events.ComponentInteractionCreate, response stri
 			),
 		},
 	})
+	return
 	/*
 		Default message response. Sends the response back as a message only the user can see.
 		Control the response via switch case assignments.
@@ -83,6 +86,7 @@ func selectMenuClickRegister(event *events.ComponentInteractionCreate, response 
 			),
 		},
 	})
+	return
 	/*
 		Default message response. Sends the response back as a message only the user can see.
 		Control the response via switch case assignments.
@@ -109,6 +113,7 @@ func selectUserClickRegister(event *events.ComponentInteractionCreate, response 
 		_ = event.UpdateMessage(discord.MessageUpdate{
 			Content: &response,
 		})
+		return
 	}
 }
 
@@ -119,8 +124,13 @@ Will add and use this feature for channel selection on posts for bot
 */
 func selectChannelClickRegister(event *events.ComponentInteractionCreate, response string) {
 	data := event.ChannelSelectMenuInteractionData()
-	channelArray := data.Channels()
-	channelName := channelArray[0].Name
+	if len(data.Channels()) <= 0 {
+		_ = event.UpdateMessage(discord.MessageUpdate{
+			Content: &defaultErrorMessage,
+		})
+		return
+	}
+	channelName := data.Channels()[0].Name
 	channels := data.Values
 	if len(channels) > 0 {
 		selectedChannel := channels[0]
@@ -129,5 +139,36 @@ func selectChannelClickRegister(event *events.ComponentInteractionCreate, respon
 		_ = event.UpdateMessage(discord.MessageUpdate{
 			Content: &response,
 		})
+		return
 	}
+}
+
+/*
+Role select menu interactions logic
+Allows a user to select a role via a menu and assigns it to them.
+Will add more validation logic for restricted roles and filtering
+*/
+func selectRoleClickRegister(event *events.ComponentInteractionCreate, response string) {
+	data := event.RoleSelectMenuInteractionData()
+	if len(data.Roles()) <= 0 {
+		_ = event.UpdateMessage(discord.MessageUpdate{
+			Content: &defaultErrorMessage,
+		})
+		return
+	}
+	selectedRoleIDs := event.Member().RoleIDs
+	selectedRoleIDs = append(selectedRoleIDs, data.Roles()[0].ID)
+	_, err := event.Client().Rest.UpdateMember(*event.GuildID(), event.User().ID, discord.MemberUpdate{
+		Roles: &selectedRoleIDs,
+	})
+	if err != nil {
+		defaultErrorMessage = err.Error()
+		_ = event.UpdateMessage(discord.MessageUpdate{
+			Content: &defaultErrorMessage,
+		})
+	}
+	response = "Succesfully updated " + event.Member().User.Username + " with the role " + data.Roles()[0].Name
+	_ = event.UpdateMessage(discord.MessageUpdate{
+		Content: &response,
+	})
 }
