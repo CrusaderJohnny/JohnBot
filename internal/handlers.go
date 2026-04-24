@@ -1,8 +1,6 @@
 package internal
 
 import (
-	"strings"
-
 	"github.com/disgoorg/disgo/discord"
 	"github.com/disgoorg/disgo/events"
 	"github.com/disgoorg/disgo/handler"
@@ -50,6 +48,7 @@ func CommandsHandler(data discord.SlashCommandInteractionData, e *handler.Comman
 				discord.NewActionRow(
 					discord.NewUserSelectMenu("user_select", "Select a user")),
 			},
+			Flags: discord.MessageFlagEphemeral,
 		})
 	case "selectrole":
 		return e.CreateMessage(discord.MessageCreate{
@@ -58,6 +57,7 @@ func CommandsHandler(data discord.SlashCommandInteractionData, e *handler.Comman
 				discord.NewActionRow(
 					discord.NewRoleSelectMenu("role_select", "Select a role")),
 			},
+			Flags: discord.MessageFlagEphemeral,
 		})
 	case "selectchannel":
 		return e.CreateMessage(discord.MessageCreate{
@@ -66,6 +66,7 @@ func CommandsHandler(data discord.SlashCommandInteractionData, e *handler.Comman
 				discord.NewActionRow(
 					discord.NewChannelSelectMenu("channel_select", "Select a channel")),
 			},
+			Flags: discord.MessageFlagEphemeral,
 		})
 	case "mentionablemenu":
 		return e.CreateMessage(discord.MessageCreate{
@@ -74,96 +75,10 @@ func CommandsHandler(data discord.SlashCommandInteractionData, e *handler.Comman
 				discord.NewActionRow(
 					discord.NewMentionableSelectMenu("mention_select", "Select a user or role")),
 			},
+			Flags: discord.MessageFlagEphemeral,
 		})
 	}
 	return nil
-}
-
-/*
-Button click interactions logic
-Handles the button click logic and reply for event data
-*/
-func ButtonClickRegister(event *events.ComponentInteractionCreate, response string) {
-	// get the pressed button value from customID
-	buttonID := event.ButtonInteractionData().CustomID()
-	// Compares the value via switch case using strings.ToLower to ensure case matching
-	switch strings.ToLower(buttonID) {
-	case "primary_1":
-		response = "Selected Option 1"
-	case "secondary_1":
-		response = "Selected Option 2"
-	case "success_1":
-		response = "Selected Option 3"
-	case "danger_1":
-		response = "Selected Option 4"
-	default:
-		response = "Selected Unknown"
-	}
-	// updates the message to now say the button option selected and disables the other buttons
-	_ = event.UpdateMessage(discord.MessageUpdate{
-		Content: &response,
-		Components: &[]discord.LayoutComponent{
-			discord.NewActionRow(
-				discord.NewPrimaryButton("Primary Button", "Primary_1").WithDisabled(true),
-				discord.NewSecondaryButton("Secondary Button", "Secondary_1").WithDisabled(true),
-				discord.NewSuccessButton("Success Button", "Success_1").WithDisabled(true),
-				discord.NewDangerButton("Danger Button", "Danger_1").WithDisabled(true),
-			),
-		},
-	})
-	/*
-		Default message response. Sends the response back as a message only the user can see.
-		Control the response via switch case assignments.
-		Disabled currently for testing message updates functionality
-
-
-		_ = event.CreateMessage(discord.MessageCreate{
-			Content: response,
-			Flags:   discord.MessageFlagEphemeral,
-		})
-	*/
-}
-
-/*
-Select menu interactions logic
-Handles select menu selection logic and reply for event data
-*/
-func SelectMenuClickRegister(event *events.ComponentInteractionCreate, response string) {
-	// gets the menu type ID from customID
-	selectID := event.StringSelectMenuInteractionData().CustomID()
-	// Compares the value via switch case using strings.ToLower to ensure case matching
-	switch strings.ToLower(selectID) {
-	// Current color select menu. Can create multiple menu types and switch case for different types of replies.
-	case "color_select":
-		selectedColour := event.StringSelectMenuInteractionData().Values[0]
-		response = "You selected " + selectedColour
-	}
-	// updates the message locking out the selection buttons. Can also have it updated to not lock out changing the response with each selection
-	_ = event.UpdateMessage(discord.MessageUpdate{
-		Content: &response,
-		Components: &[]discord.LayoutComponent{
-			discord.NewActionRow(
-				discord.NewStringSelectMenu(
-					"color_select",
-					"Choose a color",
-					discord.NewStringSelectMenuOption("Red", "red"),
-					discord.NewStringSelectMenuOption("Green", "green"),
-					discord.NewStringSelectMenuOption("Blue", "blue"),
-				).WithDisabled(true),
-			),
-		},
-	})
-	/*
-		Default message response. Sends the response back as a message only the user can see.
-		Control the response via switch case assignments.
-		Disabled currently for testing message updates functionality
-
-
-		_ = event.CreateMessage(discord.MessageCreate{
-			Content: response,
-			Flags:   discord.MessageFlagEphemeral,
-		})
-	*/
 }
 
 /*
@@ -177,15 +92,15 @@ func HandlerInteractions(event *events.ComponentInteractionCreate) {
 	switch event.Data.Type() {
 	// button interactions
 	case discord.ComponentTypeButton:
-		ButtonClickRegister(event, response)
+		buttonClickRegister(event, response)
 	case discord.ComponentTypeStringSelectMenu:
-		SelectMenuClickRegister(event, response)
+		selectMenuClickRegister(event, response)
 	case discord.ComponentTypeUserSelectMenu:
-		return
+		selectUserClickRegister(event, response)
 	case discord.ComponentTypeRoleSelectMenu:
 		return
 	case discord.ComponentTypeChannelSelectMenu:
-		return
+		selectChannelClickRegister(event, response)
 	case discord.ComponentTypeMentionableSelectMenu:
 		return
 	default:
