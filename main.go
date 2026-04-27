@@ -42,6 +42,7 @@ func main() {
 	r.SlashCommand("/selectrole", internal.CommandsHandler)
 	r.SlashCommand("/selectchannel", internal.CommandsHandler)
 	r.SlashCommand("/mentionablemenu", internal.CommandsHandler)
+	r.SlashCommand("/modal", internal.CommandsHandler)
 
 	// Client established, WithEventListeners for routing handler, WithEventListenerFunc for no router
 	client, err := disgo.New(cfg.Token,

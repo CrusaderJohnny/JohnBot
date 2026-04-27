@@ -77,6 +77,21 @@ func CommandsHandler(data discord.SlashCommandInteractionData, e *handler.Comman
 			},
 			Flags: discord.MessageFlagEphemeral,
 		})
+	case "modal":
+		return e.Modal(discord.ModalCreate{
+			CustomID: "test_modal",
+			Title:    "Test modal",
+			Components: []discord.LayoutComponent{
+				discord.LabelComponent{
+					Label:     "Name",
+					Component: discord.NewShortTextInput("Name").WithPlaceholder("Enter Name").WithMinLength(3).WithMaxLength(30),
+				},
+				discord.LabelComponent{
+					Label:     "Description",
+					Component: discord.NewParagraphTextInput("Description").WithPlaceholder("Enter a description here").WithMinLength(3).WithMaxLength(30),
+				},
+			},
+		})
 	}
 	return nil
 }
@@ -102,7 +117,7 @@ func HandlerInteractions(event *events.ComponentInteractionCreate) {
 	case discord.ComponentTypeChannelSelectMenu:
 		selectChannelClickRegister(event, response)
 	case discord.ComponentTypeMentionableSelectMenu:
-		return
+		selectMentionableMenuClickRegister(event, response)
 	default:
 		_ = event.CreateMessage(discord.MessageCreate{
 			Content: "Unknown Interaction",

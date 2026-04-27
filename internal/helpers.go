@@ -172,3 +172,26 @@ func selectRoleClickRegister(event *events.ComponentInteractionCreate, response 
 		Content: &response,
 	})
 }
+
+/*
+Role mentionable menu interactions logic
+Handles the mentionable role menu logic
+*/
+func selectMentionableMenuClickRegister(event *events.ComponentInteractionCreate, response string) {
+	data := event.MentionableSelectMenuInteractionData()
+	role := data.Roles()
+	if len(role) > 0 {
+		response = "Hey You! <@&" + role[0].ID.String() + ">"
+		_ = event.CreateMessage(discord.MessageCreate{
+			Content: response,
+		})
+	}
+}
+
+/*
+Modal Interaction logic
+Handles Modal interaction logic. Currently very minimal logic involved
+*/
+func selectModalClickRegister(event *events.ComponentInteractionCreate, response string) {
+
+}

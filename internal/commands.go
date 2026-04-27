@@ -43,4 +43,8 @@ var Commands = []discord.ApplicationCommandCreate{
 		Name:        "mentionablemenu",
 		Description: "Show mentionable menu for role selection",
 	},
+	discord.SlashCommandCreate{
+		Name:        "modal",
+		Description: "Modal display",
+	},
 }
