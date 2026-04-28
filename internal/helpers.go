@@ -192,6 +192,13 @@ func selectMentionableMenuClickRegister(event *events.ComponentInteractionCreate
 Modal Interaction logic
 Handles Modal interaction logic. Currently very minimal logic involved
 */
-func selectModalClickRegister(event *events.ComponentInteractionCreate, response string) {
-
+func selectModalClickRegister(event *events.ModalSubmitInteractionCreate, response string) {
+	data := event.Data
+	nameValue := data.Text("Name")
+	descriptionValue := data.Text("Description")
+	response = "You have entered '" + nameValue + "' as your name and '" + descriptionValue + "' as your description."
+	_ = event.CreateMessage(discord.MessageCreate{
+		Content: response,
+		Flags:   discord.MessageFlagEphemeral,
+	})
 }

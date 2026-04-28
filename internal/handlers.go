@@ -1,6 +1,8 @@
 package internal
 
 import (
+	"strings"
+
 	"github.com/disgoorg/disgo/discord"
 	"github.com/disgoorg/disgo/events"
 	"github.com/disgoorg/disgo/handler"
@@ -27,6 +29,7 @@ func CommandsHandler(data discord.SlashCommandInteractionData, e *handler.Comman
 					discord.NewLinkButton("Link Button", "https://discord.com/channels/1492233366433562838/1493356833128054896"),
 				),
 			},
+			Flags: discord.MessageFlagEphemeral,
 		})
 	case "selectmenu":
 		return e.CreateMessage(discord.MessageCreate{
@@ -40,6 +43,7 @@ func CommandsHandler(data discord.SlashCommandInteractionData, e *handler.Comman
 						discord.NewStringSelectMenuOption("Green", "green"),
 						discord.NewStringSelectMenuOption("Blue", "blue"),
 					))},
+			Flags: discord.MessageFlagEphemeral,
 		})
 	case "selectuser":
 		return e.CreateMessage(discord.MessageCreate{
@@ -100,7 +104,7 @@ func CommandsHandler(data discord.SlashCommandInteractionData, e *handler.Comman
 Improved Helper to handle a variety of interactions
 Checks the type of interaction then sorts to switch cases for logic
 */
-func HandlerInteractions(event *events.ComponentInteractionCreate) {
+func HandlerComponentInteractions(event *events.ComponentInteractionCreate) {
 	// assign a string var to hold responses. Allows pointer to be used for updating messages
 	var response string
 	// switch case off of the type of data passed into
@@ -121,6 +125,20 @@ func HandlerInteractions(event *events.ComponentInteractionCreate) {
 	default:
 		_ = event.CreateMessage(discord.MessageCreate{
 			Content: "Unknown Interaction",
+			Flags:   discord.MessageFlagEphemeral,
+		})
+	}
+}
+
+func HandlerModalInteractions(event *events.ModalSubmitInteractionCreate) {
+	var response string
+	switch strings.ToLower(event.Data.CustomID) {
+	case "test_modal":
+		selectModalClickRegister(event, response)
+	default:
+		_ = event.CreateMessage(discord.MessageCreate{
+			Content: "Unknown Interaction",
+			Flags:   discord.MessageFlagEphemeral,
 		})
 	}
 }

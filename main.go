@@ -52,7 +52,8 @@ func main() {
 				gateway.IntentMessageContent,
 			),
 		), bot.WithEventListeners(r),
-		bot.WithEventListenerFunc(internal.HandlerInteractions),
+		bot.WithEventListenerFunc(internal.HandlerComponentInteractions),
+		bot.WithEventListenerFunc(internal.HandlerModalInteractions),
 	)
 
 	if err != nil {
