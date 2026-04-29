@@ -10,6 +10,7 @@ import (
 
 	"github.com/disgoorg/disgo"
 	"github.com/disgoorg/disgo/bot"
+	"github.com/disgoorg/disgo/events"
 	"github.com/disgoorg/disgo/gateway"
 	"github.com/disgoorg/disgo/handler"
 	"github.com/disgoorg/snowflake/v2"
@@ -45,6 +46,7 @@ func main() {
 	r.SlashCommand("/modal", internal.CommandsHandler)
 
 	// Client established, WithEventListeners for routing handler, WithEventListenerFunc for no router
+	// Using events.ListenerAdapter struct to direct interactions to proper handlers instead of using multiple WithEventListenerFunc calls
 	client, err := disgo.New(cfg.Token,
 		bot.WithGatewayConfigOpts(
 			gateway.WithIntents(
@@ -52,8 +54,10 @@ func main() {
 				gateway.IntentMessageContent,
 			),
 		), bot.WithEventListeners(r),
-		bot.WithEventListenerFunc(internal.HandlerComponentInteractions),
-		bot.WithEventListenerFunc(internal.HandlerModalInteractions),
+		bot.WithEventListeners(&events.ListenerAdapter{
+			OnComponentInteraction: internal.HandlerComponentInteractions,
+			OnModalSubmit:          internal.HandlerModalInteractions,
+		}),
 	)
 
 	if err != nil {

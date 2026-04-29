@@ -190,7 +190,7 @@ func selectMentionableMenuClickRegister(event *events.ComponentInteractionCreate
 
 /*
 Modal Interaction logic
-Handles Modal interaction logic. Currently very minimal logic involved
+Handles Modal interaction logic. Currently, takes information submitted and returns it as an ephemeral message to the user.
 */
 func selectModalClickRegister(event *events.ModalSubmitInteractionCreate, response string) {
 	data := event.Data

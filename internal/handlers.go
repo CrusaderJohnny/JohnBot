@@ -100,6 +100,8 @@ func CommandsHandler(data discord.SlashCommandInteractionData, e *handler.Comman
 	return nil
 }
 
+type BotEventListener struct{}
+
 /*
 Improved Helper to handle a variety of interactions
 Checks the type of interaction then sorts to switch cases for logic
@@ -130,6 +132,10 @@ func HandlerComponentInteractions(event *events.ComponentInteractionCreate) {
 	}
 }
 
+/*
+Modal Interactions Handler
+Receives all modal interaction events and routes them according to customIDs
+*/
 func HandlerModalInteractions(event *events.ModalSubmitInteractionCreate) {
 	var response string
 	switch strings.ToLower(event.Data.CustomID) {
