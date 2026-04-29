@@ -13,10 +13,23 @@ Slash commands handler function
 Checks and compares the commandname to a match case then handles the logic for those commands
 */
 func CommandsHandler(data discord.SlashCommandInteractionData, e *handler.CommandEvent) error {
+	// assign the slash command data to variable
 	c := e.SlashCommandInteractionData()
+	// switch logic based on custom command name sent to bot
 	switch c.CommandName() {
+	/*
+		Say command
+		Usage: "/say" [message] 'string' [ephemeral] 'bool'
+		Description: Type /say in discord channel. Bot responds with two fields, [message] for the message you wish the bot to say, and [ephemeral] for if only you wish to see it.
+	*/
 	case "say":
 		return e.CreateMessage(discord.NewMessageCreate().WithContent(data.String("message")).WithEphemeral(data.Bool("ephemeral")))
+	/*
+		Buttons command
+		Usage: "/buttons"
+		Description: Type /buttons in discord channel. Buttons will appear for the user that called the command.
+		Ephemeral Flag hides the message for others so only user who calls command may see and click on the buttons
+	*/
 	case "buttons":
 		return e.CreateMessage(discord.MessageCreate{
 			Content: "Choose an action:",
@@ -31,6 +44,11 @@ func CommandsHandler(data discord.SlashCommandInteractionData, e *handler.Comman
 			},
 			Flags: discord.MessageFlagEphemeral,
 		})
+	/*
+		Select Menu Command
+		Usage: "/selectmenu"
+		Description: Type /selectmenu to generate a selection menu. User may click on different colours to select them.
+	*/
 	case "selectmenu":
 		return e.CreateMessage(discord.MessageCreate{
 			Content: "Choose a color",
@@ -45,6 +63,11 @@ func CommandsHandler(data discord.SlashCommandInteractionData, e *handler.Comman
 					))},
 			Flags: discord.MessageFlagEphemeral,
 		})
+	/*
+		Select User Command
+		Usage: "/selectuser"
+		Description: Type /selectuser to generate a drop down menu of users within the server.
+	*/
 	case "selectuser":
 		return e.CreateMessage(discord.MessageCreate{
 			Content: "Select a user",
@@ -54,6 +77,11 @@ func CommandsHandler(data discord.SlashCommandInteractionData, e *handler.Comman
 			},
 			Flags: discord.MessageFlagEphemeral,
 		})
+	/*
+		Select Role Command
+		Usage: "/selectrole"
+		Description: Type /selectrole to generate a drop down menu of roles within the server.
+	*/
 	case "selectrole":
 		return e.CreateMessage(discord.MessageCreate{
 			Content: "Select a role",
@@ -63,6 +91,11 @@ func CommandsHandler(data discord.SlashCommandInteractionData, e *handler.Comman
 			},
 			Flags: discord.MessageFlagEphemeral,
 		})
+	/*
+		Select Channel Command
+		Usage: "/selectchannel"
+		Description: Type /selectchannel to generate a drop down menu of channels within the server.
+	*/
 	case "selectchannel":
 		return e.CreateMessage(discord.MessageCreate{
 			Content: "Select a channel",
@@ -72,6 +105,11 @@ func CommandsHandler(data discord.SlashCommandInteractionData, e *handler.Comman
 			},
 			Flags: discord.MessageFlagEphemeral,
 		})
+	/*
+		Mentionable Menu Command
+		Usage: "/mentionablemenu"
+		Description: Type /mentionablemenu to genereate a drop down menu of users or roles within the server.
+	*/
 	case "mentionablemenu":
 		return e.CreateMessage(discord.MessageCreate{
 			Content: "Choose a mentionable menu",
@@ -81,6 +119,11 @@ func CommandsHandler(data discord.SlashCommandInteractionData, e *handler.Comman
 			},
 			Flags: discord.MessageFlagEphemeral,
 		})
+	/*
+		Generate Modal Command
+		Usage: "/modal"
+		Description: Type /modal to generate a pop out modal in discord with text fields.
+	*/
 	case "modal":
 		return e.Modal(discord.ModalCreate{
 			CustomID: "test_modal",
@@ -99,8 +142,6 @@ func CommandsHandler(data discord.SlashCommandInteractionData, e *handler.Comman
 	}
 	return nil
 }
-
-type BotEventListener struct{}
 
 /*
 Improved Helper to handle a variety of interactions
